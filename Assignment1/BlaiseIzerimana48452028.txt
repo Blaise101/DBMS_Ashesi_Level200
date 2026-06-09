@@ -382,3 +382,81 @@ MariaDB [MOVIECO]> SELECT m.Movie_TitLe, p.Price_Description, p.Price_RentFee, m
 5 rows in set (0.001 sec)
 
 
+Question 24
+
+MariaDB [MOVIECO]> SELECT DISTINCT m.Mem_Num, m.Mem_FName, m.Mem_LName, m.Mem_Balance FROM MEMBERSHIP m JOIN RENTAL r ON m.MEM_NUM=r.MEM_NUM;
++---------+-----------+-----------+-------------+
+| Mem_Num | Mem_FName | Mem_LName | Mem_Balance |
++---------+-----------+-----------+-------------+
+|     102 | Tami      | Dawson    |          11 |
+|     103 | Curt      | Knight    |           6 |
+|     104 | Jamal     | Melendez  |           0 |
+|     105 | Iva       | Mcclain   |          15 |
+|     107 | Rosario   | Elliott   |           5 |
+|     110 | Lewis     | Rosales   |           0 |
+|     111 | Stacy     | Mann      |           8 |
++---------+-----------+-----------+-------------+
+7 rows in set (0.029 sec)
+
+
+ Question 25
+
+MariaDB [MOVIECO]> SELECT MIN(m.MEM_BALANCE) AS 'Minimum Balance', MAX(m.MEM_BALANCE) AS 'Maximum Balance', AVG(m.MEM_BALANCE) AS 'Average Balance' FROM MEMBERSHIP m WHERE m.MEM_NUM IN (SELECT DISTINCT MEM_NUM FROM RENTAL);
++-----------------+-----------------+-----------------+
+| Minimum Balance | Maximum Balance | Average Balance |
++-----------------+-----------------+-----------------+
+|               0 |              15 |          6.4286 |
++-----------------+-----------------+-----------------+
+1 row in set (0.031 sec)
+
+
+Question 26
+
+MariaDB [MOVIECO]> SELECT r.Rent_Num, r.Rent_Date, v.Vid_Num, m.Movie_Title, d.Detail_DueDate, d.Detail_ReturnDate FROM RENTAL r JOIN DETAILRENTAL d ON d.RENT_NUM=r.RENT_NUM JOIN VIDEO v ON v.VID_NUM=d.VID_NUM JOIN MOVIE m ON m.MOVIE_NUM=v.MOVIE_NUM WHERE d.DETAIL_RETURNDATE > d.DETAIL_DUEDATE ORDER BY r.RENT_NUM, m.MOVIE_TITLE;
++----------+------------+---------+----------------------------+----------------+-------------------+
+| Rent_Num | Rent_Date  | Vid_Num | Movie_Title                | Detail_DueDate | Detail_ReturnDate |
++----------+------------+---------+----------------------------+----------------+-------------------+
+|     1003 | 2016-03-02 |   54325 | The Cesar Family Christmas | 2016-03-04     | 2016-03-09        |
+|     1003 | 2016-03-02 |   61369 | What He Doesn't Know       | 2016-03-06     | 2016-03-09        |
+|     1003 | 2016-03-02 |   61388 | Where Hope Dies            | 2016-03-06     | 2016-03-09        |
+|     1004 | 2016-03-02 |   44392 | Beatnik Fever              | 2016-03-05     | 2016-03-07        |
+|     1004 | 2016-03-02 |   34367 | Richard Goodhope           | 2016-03-05     | 2016-03-07        |
++----------+------------+---------+----------------------------+----------------+-------------------+
+5 rows in set (0.002 sec)
+
+
+Question 27
+
+MariaDB [MOVIECO]> SELECT r.Rent_Num, r.Rent_Date, m.Movie_Title, d.Detail_Fee FROM RENTAL r JOIN DETAILRENTAL d ON d.RENT_NUM=r.RENT_NUM JOIN VIDEO v ON v.VID_NUM=d.VID_NUM JOIN MOVIE m ON m.MOVIE_NUM=v.MOVIE_NUM WHERE d.DETAIL_RETURNDATE <= d.DETAIL_DUEDATE;
++----------+------------+--------------------------+------------+
+| Rent_Num | Rent_Date  | Movie_Title              | Detail_Fee |
++----------+------------+--------------------------+------------+
+|     1001 | 2016-03-01 | Smokey Mountain Wildlife |          2 |
+|     1001 | 2016-03-01 | Richard Goodhope         |          4 |
+|     1001 | 2016-03-01 | Time to Burn             |          2 |
+|     1002 | 2016-03-01 | Beatnik Fever            |          4 |
+|     1004 | 2016-03-02 | Smokey Mountain Wildlife |          2 |
+|     1005 | 2016-03-02 | Smokey Mountain Wildlife |          2 |
+|     1005 | 2016-03-02 | Beatnik Fever            |          4 |
+|     1006 | 2016-03-02 | Richard Goodhope         |          4 |
+|     1008 | 2016-03-03 | Richard Goodhope         |          4 |
++----------+------------+--------------------------+------------+
+9 rows in set (0.002 sec)
+
+
+Question 28
+
+MariaDB [MOVIECO]> SELECT m.MOVIE_NUM, m.MOVIE_GENRE, ROUND(g.AVG_COST, 2) AS "Average Cost", m.MOVIE_COST, ROUND(((m.MOVIE_COST - g.AVG_COST) / g.AVG_COST) * 100, 2) AS "Percent Difference"FROM MOVIE m JOIN (SELECT MOVIE_GENRE, AVG(MOVIE_COST) AS AVG_COST FROM MOVIE GROUP BY MOVIE_GENRE) g ON m.MOVIE_GENRE = g.MOVIE_GENRE;
++-----------+-------------+--------------+------------+--------------------+
+| MOVIE_NUM | MOVIE_GENRE | Average Cost | MOVIE_COST | Percent Difference |
++-----------+-------------+--------------+------------+--------------------+
+|      1234 | FAMILY      |        39.95 |      39.95 |               0.00 |
+|      1235 | ACTION      |        52.72 |      59.95 |              13.71 |
+|      1236 | DRAMA       |        58.13 |      59.95 |               3.13 |
+|      1237 | COMEDY      |        44.12 |      29.95 |             -32.12 |
+|      1238 | DRAMA       |        58.13 |      89.95 |              54.74 |
+|      1239 | DRAMA       |        58.13 |      24.49 |             -57.87 |
+|      1245 | ACTION      |        52.72 |      45.49 |             -13.71 |
+|      1246 | COMEDY      |        44.12 |      58.29 |              32.12 |
++-----------+-------------+--------------+------------+--------------------+
+8 rows in set (0.031 sec)

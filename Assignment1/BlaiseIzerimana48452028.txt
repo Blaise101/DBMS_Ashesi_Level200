@@ -69,3 +69,58 @@ MariaDB [MovieCo]> SELECT MOVIE_NUM, MOVIE_TITLE, MOVIE_YEAR FROM MOVIE WHERE MO
 +-----------+--------------+------------+
 1 row in set (0.002 sec)
 
+
+Question 4
+
+MariaDB [MovieCo]> SELECT MOVIE_NUM, MOVIE_TITLE, MOVIE_GENRE, PRICE_CODE FROM MOVIE WHERE MOVIE_GENRE='Action';
++-----------+--------------------------+-------------+------------+
+| MOVIE_NUM | MOVIE_TITLE              | MOVIE_GENRE | PRICE_CODE |
++-----------+--------------------------+-------------+------------+
+|      1235 | Smokey Mountain Wildlife | ACTION      |          1 |
+|      1245 | Time to Burn             | ACTION      |          1 |
++-----------+--------------------------+-------------+------------+
+2 rows in set (0.002 sec)
+
+MariaDB [MovieCo]> UPDATE MOVIE SET PRICE_CODE=3 WHERE MOVIE_GENRE='Action';
+Query OK, 2 rows affected (0.017 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+MariaDB [MovieCo]> SELECT MOVIE_NUM, MOVIE_TITLE, MOVIE_GENRE, PRICE_CODE FROM MOVIE WHERE MOVIE_GENRE='Action';
++-----------+--------------------------+-------------+------------+
+| MOVIE_NUM | MOVIE_TITLE              | MOVIE_GENRE | PRICE_CODE |
++-----------+--------------------------+-------------+------------+
+|      1235 | Smokey Mountain Wildlife | ACTION      |          3 |
+|      1245 | Time to Burn             | ACTION      |          3 |
++-----------+--------------------------+-------------+------------+
+2 rows in set (0.001 sec)
+
+
+Question 5
+
+MariaDB [MovieCo]> SELECT PRICE_CODE, PRICE_DESCRIPTION, PRICE_RENTFEE FROM PRICE;
++------------+-------------------+---------------+
+| PRICE_CODE | PRICE_DESCRIPTION | PRICE_RENTFEE |
++------------+-------------------+---------------+
+|          1 | Standard          |          2.00 |
+|          2 | New Release       |          3.50 |
+|          3 | Discount          |          1.50 |
+|          4 | Weekly Special    |          1.00 |
++------------+-------------------+---------------+
+4 rows in set (0.002 sec)
+
+MariaDB [MovieCo]> UPDATE PRICE SET PRICE_RENTFEE=PRICE_RENTFEE+0.5;
+Query OK, 4 rows affected (0.028 sec)
+Rows matched: 4  Changed: 4  Warnings: 0
+
+MariaDB [MovieCo]> SELECT PRICE_CODE, PRICE_DESCRIPTION, PRICE_RENTFEE FROM PRICE;
++------------+-------------------+---------------+
+| PRICE_CODE | PRICE_DESCRIPTION | PRICE_RENTFEE |
++------------+-------------------+---------------+
+|          1 | Standard          |          2.50 |
+|          2 | New Release       |          4.00 |
+|          3 | Discount          |          2.00 |
+|          4 | Weekly Special    |          1.50 |
++------------+-------------------+---------------+
+4 rows in set (0.001 sec)
+
+MariaDB [MovieCo]>

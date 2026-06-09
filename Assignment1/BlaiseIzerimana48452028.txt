@@ -251,3 +251,134 @@ MariaDB [MOVIECO]> SELECT Mem_Num, Mem_FName, Mem_LName, Mem_Street, Mem_State, 
 +---------+-----------+-----------+-----------------------+-----------+-------------+
 2 rows in set (0.005 sec)
 
+
+Question 15
+
+MariaDB [MOVIECO]> SELECT Movie_Genre, COUNT(*) AS 'Number of Movies' FROM MOVIE GROUP BY Movie_Genre;
++-------------+------------------+
+| Movie_Genre | Number of Movies |
++-------------+------------------+
+| ACTION      |                2 |
+| COMEDY      |                2 |
+| DRAMA       |                3 |
+| FAMILY      |                1 |
++-------------+------------------+
+4 rows in set (0.032 sec)
+
+
+Question 16
+
+MariaDB [MOVIECO]> SELECT AVG(MOVIE_COST) AS 'Average Movie Cost' FROM MOVIE;
++--------------------+
+| Average Movie Cost |
++--------------------+
+|          51.002500 |
++--------------------+
+1 row in set (0.032 sec)
+
+
+Question 17
+
+MariaDB [MOVIECO]> SELECT Movie_Genre, ROUND(AVG(MOVIE_COST), 2) AS 'Average Cost' FROM MOVIE GROUP BY MOVIE_GENRE;
++-------------+--------------+
+| Movie_Genre | Average Cost |
++-------------+--------------+
+| ACTION      |        52.72 |
+| COMEDY      |        44.12 |
+| DRAMA       |        58.13 |
+| FAMILY      |        39.95 |
++-------------+--------------+
+4 rows in set (0.028 sec)
+
+
+Question 18
+
+MariaDB [MOVIECO]> SELECT m.Movie_Title, m.Movie_Genre, p.Price_Description, p.Price_RentFee FROM MOVIE m JOIN PRICE p ON m.Price_Code = p.Price_Code;
++----------------------------+-------------+-------------------+---------------+
+| Movie_Title                | Movie_Genre | Price_Description | Price_RentFee |
++----------------------------+-------------+-------------------+---------------+
+| The Cesar Family Christmas | FAMILY      | New Release       |          4.00 |
+| Smokey Mountain Wildlife   | ACTION      | Discount          |          2.00 |
+| Richard Goodhope           | DRAMA       | New Release       |          4.00 |
+| Beatnik Fever              | COMEDY      | New Release       |          4.00 |
+| Where Hope Dies            | DRAMA       | Discount          |          2.00 |
+| Time to Burn               | ACTION      | Discount          |          2.00 |
+| What He Doesn't Know       | COMEDY      | Standard          |          2.50 |
++----------------------------+-------------+-------------------+---------------+
+7 rows in set (0.001 sec)
+
+
+Question 19
+
+MariaDB [MOVIECO]> SELECT m.Movie_Genre, ROUND(AVG(p.Price_RentFee), 2) AS 'Average Rental Fee' FROM MOVIE m JOIN PRICE p ON m.PRICE_CODE = p.PRICE_CODE GROUP BY Movie_Genre;
++-------------+--------------------+
+| Movie_Genre | Average Rental Fee |
++-------------+--------------------+
+| ACTION      |               2.00 |
+| COMEDY      |               3.25 |
+| DRAMA       |               3.00 |
+| FAMILY      |               4.00 |
++-------------+--------------------+
+4 rows in set (0.029 sec)
+
+
+Question 20
+
+MariaDB [MOVIECO]> SELECT m.Movie_Title, ROUND(m.Movie_Cost/p.Price_RentFee, 2) AS 'Breakeven Rentals' FROM MOVIE m JOIN PRICE p ON m.PRICE_CODE = p.PRICE_CODE;
++----------------------------+-------------------+
+| Movie_Title                | Breakeven Rentals |
++----------------------------+-------------------+
+| The Cesar Family Christmas |              9.99 |
+| Smokey Mountain Wildlife   |             29.98 |
+| Richard Goodhope           |             14.99 |
+| Beatnik Fever              |              7.49 |
+| Where Hope Dies            |             12.25 |
+| Time to Burn               |             22.75 |
+| What He Doesn't Know       |             23.32 |
++----------------------------+-------------------+
+7 rows in set (0.002 sec)
+
+
+Question 21
+
+MariaDB [MOVIECO]> SELECT Movie_Title, Movie_Year FROM MOVIE WHERE PRICE_CODE IS NOT NULL;
++----------------------------+------------+
+| Movie_Title                | Movie_Year |
++----------------------------+------------+
+| What He Doesn't Know       |       2013 |
+| The Cesar Family Christmas |       2014 |
+| Richard Goodhope           |       2015 |
+| Beatnik Fever              |       2014 |
+| Smokey Mountain Wildlife   |       2011 |
+| Where Hope Dies            |       2005 |
+| Time to Burn               |       2010 |
++----------------------------+------------+
+7 rows in set (0.030 sec)
+
+
+Question 22
+
+MariaDB [MOVIECO]> SELECT Movie_Title, Movie_Genre, Movie_Cost FROM MOVIE WHERE MOVIE_COST > 44.99 AND MOVIE_COST < 49.99;
++--------------+-------------+------------+
+| Movie_Title  | Movie_Genre | Movie_Cost |
++--------------+-------------+------------+
+| Time to Burn | ACTION      |      45.49 |
++--------------+-------------+------------+
+1 row in set (0.001 sec)
+
+
+Question 23
+
+MariaDB [MOVIECO]> SELECT m.Movie_TitLe, p.Price_Description, p.Price_RentFee, m.Movie_Genre FROM MOVIE m JOIN PRICE p on p.PRICE_CODE=m.PRICE_CODE WHERE m.Movie_Genre IN('FAMILY', 'COMEDY', 'DRAMA');
++----------------------------+-------------------+---------------+-------------+
+| Movie_TitLe                | Price_Description | Price_RentFee | Movie_Genre |
++----------------------------+-------------------+---------------+-------------+
+| The Cesar Family Christmas | New Release       |          4.00 | FAMILY      |
+| Richard Goodhope           | New Release       |          4.00 | DRAMA       |
+| Beatnik Fever              | New Release       |          4.00 | COMEDY      |
+| Where Hope Dies            | Discount          |          2.00 | DRAMA       |
+| What He Doesn't Know       | Standard          |          2.50 | COMEDY      |
++----------------------------+-------------------+---------------+-------------+
+5 rows in set (0.001 sec)
+
+

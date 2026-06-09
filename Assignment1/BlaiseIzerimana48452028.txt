@@ -123,4 +123,67 @@ MariaDB [MovieCo]> SELECT PRICE_CODE, PRICE_DESCRIPTION, PRICE_RENTFEE FROM PRIC
 +------------+-------------------+---------------+
 4 rows in set (0.001 sec)
 
-MariaDB [MovieCo]>
+
+Question 6
+
+MariaDB [movieco]> SELECT Movie_Title, Movie_Year, Movie_Genre FROM MOVIE;
++----------------------------+------------+-------------+
+| Movie_Title                | Movie_Year | Movie_Genre |
++----------------------------+------------+-------------+
+| The Cesar Family Christmas |       2014 | FAMILY      |
+| Smokey Mountain Wildlife   |       2011 | ACTION      |
+| Richard Goodhope           |       2015 | DRAMA       |
+| Beatnik Fever              |       2014 | COMEDY      |
+| Constant Companion         |       2015 | DRAMA       |
+| Where Hope Dies            |       2005 | DRAMA       |
+| Time to Burn               |       2010 | ACTION      |
+| What He Doesn't Know       |       2013 | COMEDY      |
++----------------------------+------------+-------------+
+8 rows in set (0.001 sec)
+
+
+Question 7
+
+MariaDB [MOVIECO]> SELECT Movie_Year, Movie_Title, Movie_Cost FROM MOVIE ORDER BY Movie_Year DESC;
++------------+----------------------------+------------+
+| Movie_Year | Movie_Title                | Movie_Cost |
++------------+----------------------------+------------+
+|       2015 | Richard Goodhope           |      59.95 |
+|       2015 | Constant Companion         |      89.95 |
+|       2014 | The Cesar Family Christmas |      39.95 |
+|       2014 | Beatnik Fever              |      29.95 |
+|       2013 | What He Doesn't Know       |      58.29 |
+|       2011 | Smokey Mountain Wildlife   |      59.95 |
+|       2010 | Time to Burn               |      45.49 |
+|       2005 | Where Hope Dies            |      24.49 |
++------------+----------------------------+------------+
+8 rows in set (0.026 sec)
+
+
+Question 8
+
+MariaDB [MOVIECO]> SELECT Movie_Title, Movie_Year, Movie_Genre FROM MOVIE ORDER BY Movie_Genre, Movie_Year DESC;
++----------------------------+------------+-------------+
+| Movie_Title                | Movie_Year | Movie_Genre |
++----------------------------+------------+-------------+
+| Smokey Mountain Wildlife   |       2011 | ACTION      |
+| Time to Burn               |       2010 | ACTION      |
+| Beatnik Fever              |       2014 | COMEDY      |
+| What He Doesn't Know       |       2013 | COMEDY      |
+| Richard Goodhope           |       2015 | DRAMA       |
+| Constant Companion         |       2015 | DRAMA       |
+| Where Hope Dies            |       2005 | DRAMA       |
+| The Cesar Family Christmas |       2014 | FAMILY      |
++----------------------------+------------+-------------+
+8 rows in set (0.001 sec)
+
+
+Question 9
+
+MariaDB [MOVIECO]> SELECT Movie_Num, Movie_Title, Price_Code FROM MOVIE WHERE Movie_Title LIKE 'R%';
++-----------+------------------+------------+
+| Movie_Num | Movie_Title      | Price_Code |
++-----------+------------------+------------+
+|      1236 | Richard Goodhope |          2 |
++-----------+------------------+------------+
+1 row in set (0.027 sec)

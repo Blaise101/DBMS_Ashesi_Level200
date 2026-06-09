@@ -227,3 +227,27 @@ MariaDB [MOVIECO]> SELECT Movie_Num, Movie_Title, Movie_Cost FROM MOVIE WHERE Mo
 +-----------+--------------------------+------------+
 5 rows in set (0.027 sec)
 
+
+Question 13
+
+MariaDB [MOVIECO]> SELECT Movie_Num, Movie_Title, Movie_Cost, Movie_Genre FROM MOVIE WHERE (Movie_Genre='ACTION' OR Movie_Genre='COMEDY') AND Movie_Cost < 50 ORDER BY Movie_Genre;
++-----------+---------------+------------+-------------+
+| Movie_Num | Movie_Title   | Movie_Cost | Movie_Genre |
++-----------+---------------+------------+-------------+
+|      1245 | Time to Burn  |      45.49 | ACTION      |
+|      1237 | Beatnik Fever |      29.95 | COMEDY      |
++-----------+---------------+------------+-------------+
+2 rows in set (0.002 sec)
+
+
+Question 14
+
+MariaDB [MOVIECO]> SELECT Mem_Num, Mem_FName, Mem_LName, Mem_Street, Mem_State, Mem_Balance FROM MEMBERSHIP WHERE Mem_State='TN' AND Mem_Balance < 5 AND Mem_Street LIKE '%Avenue';
++---------+-----------+-----------+-----------------------+-----------+-------------+
+| Mem_Num | Mem_FName | Mem_LName | Mem_Street            | Mem_State | Mem_Balance |
++---------+-----------+-----------+-----------------------+-----------+-------------+
+|     104 | Jamal     | Melendez  | 788 East 145th Avenue | TN        |           0 |
+|     112 | Luis      | Trujillo  | 7267 Melvin Avenue    | TN        |           3 |
++---------+-----------+-----------+-----------------------+-----------+-------------+
+2 rows in set (0.005 sec)
+

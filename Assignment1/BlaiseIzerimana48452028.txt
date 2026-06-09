@@ -187,3 +187,43 @@ MariaDB [MOVIECO]> SELECT Movie_Num, Movie_Title, Price_Code FROM MOVIE WHERE Mo
 |      1236 | Richard Goodhope |          2 |
 +-----------+------------------+------------+
 1 row in set (0.027 sec)
+
+
+Question 10
+
+MariaDB [MOVIECO]> SELECT Movie_Title, Movie_Year,Movie_Cost FROM MOVIE WHERE Movie_Title LIKE '%hope%' ORDER BY Movie_Title ASC;
++------------------+------------+------------+
+| Movie_Title      | Movie_Year | Movie_Cost |
++------------------+------------+------------+
+| Richard Goodhope |       2015 |      59.95 |
+| Where Hope Dies  |       2005 |      24.49 |
++------------------+------------+------------+
+2 rows in set (0.002 sec)
+
+
+Question 11
+
+MariaDB [MOVIECO]> SELECT Movie_Title, Movie_Year, Movie_Genre FROM MOVIE WHERE Movie_Genre = 'ACTION';
++--------------------------+------------+-------------+
+| Movie_Title              | Movie_Year | Movie_Genre |
++--------------------------+------------+-------------+
+| Smokey Mountain Wildlife |       2011 | ACTION      |
+| Time to Burn             |       2010 | ACTION      |
++--------------------------+------------+-------------+
+2 rows in set (0.028 sec)
+
+
+Question 12
+
+MariaDB [MOVIECO]> SELECT Movie_Num, Movie_Title, Movie_Cost FROM MOVIE WHERE Movie_Cost > 40;
++-----------+--------------------------+------------+
+| Movie_Num | Movie_Title              | Movie_Cost |
++-----------+--------------------------+------------+
+|      1235 | Smokey Mountain Wildlife |      59.95 |
+|      1236 | Richard Goodhope         |      59.95 |
+|      1238 | Constant Companion       |      89.95 |
+|      1245 | Time to Burn             |      45.49 |
+|      1246 | What He Doesn't Know     |      58.29 |
++-----------+--------------------------+------------+
+5 rows in set (0.027 sec)
+

@@ -1,0 +1,99 @@
+MariaDB [(none)]> create database hotel;
+Query OK, 1 row affected (0.029 sec)
+
+MariaDB [(none)]> use hotel;
+Database changed
+
+MariaDB [hotel]> create table hotel (HotelNo int primary key, hotelName varchar(100) not null, city varchar(100) not null);
+Query OK, 0 rows affected (0.088 sec)
+
+MariaDB [hotel]> create table Room (roomNo int not null, hotelNo int not null, type varchar(100) not null, price decimal(10,2) not null, primary key (roomNo, hotelNo), foreign key (hotelNo) references hotel (hotelNo));
+Query OK, 0 rows affected (0.014 sec)
+
+MariaDB [hotel]> create table Guest (guestNo int primary key, guestName varchar(255) not null, guestAddress varchar(255));
+Query OK, 0 rows affected (0.038 sec)
+
+MariaDB [hotel]> create table Booking (hotelNo int not null, guestNo int not null, dateFrom date not null, dateTo date, roomNo int not null, foreign key (hotelNo) references hotel (hotelNo), foreign key (guestNo) references Guest (guestNo), foreign key (roomNo) references Room (roomNo), primary key (hotelNo, guestNo, dateFrom));
+Query OK, 0 rows affected (0.039 sec)
+
+Question 7.11
+
+(a), (b), (c)
+
+MariaDB [hotel]> alter table Room Add constraint chk_type check(type in ('Single', 'Double', 'Family')), Add constraint chk_price check (price between 10.00 and 100.00), Add constraint chk_roomNo check (roomNo between 1 and 100);
+Query OK, 0 rows affected (0.153 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+(d)
+
+MariaDB [hotel]> alter table Booking Add constraint chk_dateOrder check (dateFrom < dateTo);
+Query OK, 0 rows affected (0.073 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [hotel]> DELIMITER //
+MariaDB [hotel]>
+MariaDB [hotel]> CREATE TRIGGER before_booking_insert
+    -> BEFORE INSERT ON Booking
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     IF NEW.dateFrom <= CURDATE()
+    ->        OR NEW.dateTo <= CURDATE() THEN
+    ->         SIGNAL SQLSTATE '45000'
+    ->         SET MESSAGE_TEXT = 'Booking dates must be in the future';
+    ->     END IF;
+    ->
+    ->     IF NEW.dateFrom >= NEW.dateTo THEN
+    ->         SIGNAL SQLSTATE '45000'
+    ->         SET MESSAGE_TEXT = 'dateFrom must be before dateTo';
+    ->     END IF;
+    -> END//
+Query OK, 0 rows affected (0.051 sec)
+
+(e)
+
+MariaDB [hotel]> DELIMITER //
+MariaDB [hotel]>
+MariaDB [hotel]> CREATE TRIGGER trg_no_room_double_booking
+    -> BEFORE INSERT ON Booking
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     IF EXISTS (
+    ->         SELECT 1
+    ->         FROM Booking b
+    ->         WHERE b.roomNo = NEW.roomNo
+    ->           AND NEW.dateFrom <= b.dateTo
+    ->           AND NEW.dateTo >= b.dateFrom
+    ->     ) THEN
+    ->         SIGNAL SQLSTATE '45000'
+    ->         SET MESSAGE_TEXT = 'Room is already booked for these dates';
+    ->     END IF;
+    -> END//
+Query OK, 0 rows affected (0.050 sec)
+
+(f)
+
+MariaDB [hotel]> DELIMITER //
+MariaDB [hotel]>
+MariaDB [hotel]> CREATE TRIGGER trg_no_guest_overlap
+    -> BEFORE INSERT ON Booking
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     IF EXISTS (
+    ->         SELECT 1
+    ->         FROM Booking b
+    ->         WHERE b.guestNo = NEW.guestNo
+    ->           AND NEW.dateFrom <= b.dateTo
+    ->           AND NEW.dateTo >= b.dateFrom
+    ->     ) THEN
+    ->         SIGNAL SQLSTATE '45000'
+    ->         SET MESSAGE_TEXT = 'Guest already has a booking during these dates';
+    ->     END IF;
+    -> END//
+Query OK, 0 rows affected (0.048 sec)
+
+
+MariaDB [hotel]> insert into hotel values(101, 'Hilton Essence Hotel', 'Accra'), (102, 'Accra Luxury', 'Accra'), (103, 'The diamond', 'Accra'), (104, 'MAAT luxury homes', 'Accra'), (105, 'Kumasi Luxury Appartments', 'Kumasi'),(106, 'Accra Luxury Homes', 'Achimota') ,(107, 'Lemon Beach Resort', 'Elimna'), (108, 'Pito Guest House', 'Elmina'), (109, 'Oak Plaza Suits', 'Kumasi');
+Query OK, 9 rows affected (0.125 sec)
+Records: 9  Duplicates: 0  Warnings: 0
+
+

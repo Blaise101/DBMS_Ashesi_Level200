@@ -92,6 +92,25 @@ MariaDB [hotel]> CREATE TRIGGER trg_no_guest_overlap
 Query OK, 0 rows affected (0.048 sec)
 
 
+Question 7.12
+
+MariaDB [hotel]> CREATE TABLE BookingArchive LIKE Booking;
+Query OK, 0 rows affected (0.036 sec)
+
+MariaDB [hotel]> insert into bookingArchive (Select * from Booking where dateFrom < '2013-01-01');
+Query OK, 0 rows affected (0.015 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [hotel]> Delete from Booking where dateFrom < '2013-01-01';
+Query OK, 0 rows affected (0.031 sec)
+
+
+Question 7.13
+
+MariaDB [hotel]> CREATE VIEW CheapestHotels AS SELECT h.hotelNo, h.hotelName, h.city, r.price FROM Hotel h JOIN Room r ON h.hotelNo = r.hotelNo WHERE r.price = (SELECT MIN(price) FROM Room);
+Query OK, 0 rows affected (0.042 sec)
+
+
 MariaDB [hotel]> insert into hotel values(101, 'Hilton Essence Hotel', 'Accra'), (102, 'Accra Luxury', 'Accra'), (103, 'The diamond', 'Accra'), (104, 'MAAT luxury homes', 'Accra'), (105, 'Kumasi Luxury Appartments', 'Kumasi'),(106, 'Accra Luxury Homes', 'Achimota') ,(107, 'Lemon Beach Resort', 'Elimna'), (108, 'Pito Guest House', 'Elmina'), (109, 'Oak Plaza Suits', 'Kumasi');
 Query OK, 9 rows affected (0.125 sec)
 Records: 9  Duplicates: 0  Warnings: 0

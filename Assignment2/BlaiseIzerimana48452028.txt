@@ -92,10 +92,31 @@ MariaDB [hotel]> CREATE TRIGGER trg_no_guest_overlap
 Query OK, 0 rows affected (0.048 sec)
 
 
+-- Insertions
+
+MariaDB [hotel]> INSERT INTO Hotel VALUES (101, 'Grosvenor Hotel', 'London'), (102, 'Budget Inn', 'Mumbai');
+Query OK, 2 rows affected (0.030 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+MariaDB [hotel]> INSERT INTO Room VALUES (1, 101, 'Single', 45.00), (2, 102, 'Double', 15.00);
+Query OK, 2 rows affected (0.043 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+MariaDB [hotel]> INSERT INTO Guest VALUES (1001, 'John Smith', 'London'), (1002, 'Ravi Kumar', 'India');
+Query OK, 2 rows affected (0.003 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+MariaDB [hotel]> INSERT INTO Booking VALUES (101, 1001, '2012-05-10', '2012-05-15', 1), (101, 1001, '2027-07-01', '2027-07-05', 1);
+ERROR 1644 (45000): Booking dates must be in the future
+MariaDB [hotel]> INSERT INTO Booking VALUES (101, 1001, '2026-07-10', '2026-07-15', 1), (101, 1001, '2027-07-01', '2027-07-05', 1);
+Query OK, 2 rows affected (0.041 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+
 Question 7.12
 
 MariaDB [hotel]> CREATE TABLE BookingArchive LIKE Booking;
-Query OK, 0 rows affected (0.036 sec)
+Query OK, 0 rows affected (0.031 sec)
 
 MariaDB [hotel]> insert into bookingArchive (Select * from Booking where dateFrom < '2013-01-01');
 Query OK, 0 rows affected (0.015 sec)
@@ -109,6 +130,11 @@ Question 7.13
 
 MariaDB [hotel]> CREATE VIEW CheapestHotels AS SELECT h.hotelNo, h.hotelName, h.city, r.price FROM Hotel h JOIN Room r ON h.hotelNo = r.hotelNo WHERE r.price = (SELECT MIN(price) FROM Room);
 Query OK, 0 rows affected (0.042 sec)
+
+Question 7.13
+
+MariaDB [hotel]> Create View brics_guests_view AS (Select * from Guest where guestAddress IN ('Brazil', 'Russia', 'India', 'China', 'South Africa', 'Egypt', 'Ethiopia', 'Indonesia', 'Iran', 'Saudi Arabia', 'United Arab Emirates'));
+Query OK, 0 rows affected (0.010 sec)
 
 
 MariaDB [hotel]> insert into hotel values(101, 'Hilton Essence Hotel', 'Accra'), (102, 'Accra Luxury', 'Accra'), (103, 'The diamond', 'Accra'), (104, 'MAAT luxury homes', 'Accra'), (105, 'Kumasi Luxury Appartments', 'Kumasi'),(106, 'Accra Luxury Homes', 'Achimota') ,(107, 'Lemon Beach Resort', 'Elimna'), (108, 'Pito Guest House', 'Elmina'), (109, 'Oak Plaza Suits', 'Kumasi');

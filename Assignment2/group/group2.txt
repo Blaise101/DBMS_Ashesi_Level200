@@ -181,9 +181,3 @@ Query OK, 0 rows affected (0.028 sec)
 MariaDB [hotel]> GRANT SELECT ON Brics_guests_view TO 'Accounts'@'localhost';
 Query OK, 0 rows affected (0.028 sec)
 
-
-MariaDB [hotel]> insert into hotel values(101, 'Hilton Essence Hotel', 'Accra'), (102, 'Accra Luxury', 'Accra'), (103, 'The diamond', 'Accra'), (104, 'MAAT luxury homes', 'Accra'), (105, 'Kumasi Luxury Appartments', 'Kumasi'),(106, 'Accra Luxury Homes', 'Achimota') ,(107, 'Lemon Beach Resort', 'Elimna'), (108, 'Pito Guest House', 'Elmina'), (109, 'Oak Plaza Suits', 'Kumasi');
-Query OK, 9 rows affected (0.125 sec)
-Records: 9  Duplicates: 0  Warnings: 0
-
-

@@ -101,18 +101,73 @@ MariaDB [work]> select * from EmpProjectDetails;
 +-------+-------+--------+-------------------------+-------------+
 10 rows in set (0.002 sec)
 
-7.27 Consider the following view defined on the Projects schema:
+Question 7.27
+ 
+MariaDB [work]> CREATE VIEW EmpProject(empNo, projNo, totalHours) AS SELECT w.empNo, w.projNo, SUM(hoursWorked) FROM Employee e, Project p, WorksOn w WHERE e.empNo = w.empNo AND p.projNo = w.projNo GROUP BY w.empNo, w.projNo;
+Query OK, 0 rows affected (0.035 sec)
 
-      CREATE VIEW EmpProject(empNo, projNo, totalHours)
-      AS SELECT w.empNo, w.projNo, SUM(hours Worked)
-      FROM Employee e, Project p, WorksOn w
-      WHERE e.empNo = w.empNo AND p.projNo = w.projNo
-      GROUP BY w.empNo, w.projNo;
 
-(a) SELECT* FROM EmpProject;
+(a) 
 
-(b) SELECT projNo FROM EmpProject WHERE projNo = 'SCCS';
+MariaDB [work]> SELECT* FROM EmpProject;
++-------+--------+------------+
+| empNo | projNo | totalHours |
++-------+--------+------------+
+| E0001 | P0001  |         10 |
+| E0001 | SCCS   |         15 |
+| E0002 | P0001  |         25 |
+| E0002 | SCCS   |         40 |
+| E0003 | P0003  |         35 |
+| E0004 | P0003  |         20 |
+| E0005 | P0005  |         12 |
+| E0006 | P0005  |         38 |
+| E0007 | P0005  |         30 |
+| E0009 | SCCS   |         18 |
++-------+--------+------------+
+10 rows in set (0.031 sec)
 
-(c) SELECT COUNT(projNo) FROM EmpProject WHERE empNo = 'E1';
+(b) 
 
-(d) SELECT empNo, totalHours FROM EmpProject GROUP BY empNo;
+MariaDB [work]> SELECT projNo FROM EmpProject WHERE projNo = 'SCCS';
++--------+
+| projNo |
++--------+
+| SCCS   |
+| SCCS   |
+| SCCS   |
++--------+
+3 rows in set (0.007 sec)
+
+(c)
+
+MariaDB [work]> SELECT COUNT(projNo) FROM EmpProject WHERE empNo = 'E1';
++---------------+
+| COUNT(projNo) |
++---------------+
+|             0 |
++---------------+
+1 row in set (0.002 sec)
+MariaDB [work]> SELECT COUNT(projNo) FROM EmpProject WHERE empNo = 'E0001';
++---------------+
+| COUNT(projNo) |
++---------------+
+|             2 |
++---------------+
+1 row in set (0.002 sec)
+
+(d)
+
+MariaDB [work]> SELECT empNo, totalHours FROM EmpProject GROUP BY empNo;
++-------+------------+
+| empNo | totalHours |
++-------+------------+
+| E0001 |         10 |
+| E0002 |         25 |
+| E0003 |         35 |
+| E0004 |         20 |
+| E0005 |         12 |
+| E0006 |         38 |
+| E0007 |         30 |
+| E0009 |         18 |
++-------+------------+
+8 rows in set (0.002 sec)

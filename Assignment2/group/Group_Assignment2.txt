@@ -17,19 +17,38 @@ MariaDB [hotel]> create table Booking (hotelNo int not null, guestNo int not nul
 Query OK, 0 rows affected (0.039 sec)
 
 
+-- Insertions
+
+MariaDB [hotel]> INSERT INTO Hotel VALUES (101, 'Grosvenor Hotel', 'London'), (102, 'Budget Inn', 'Mumbai'), (103, 'Sunrise Suites', 'Paris'), (104, 'Seaside Resort', 'Barcelona'), (105, 'Mountain Lodge', 'Denver'), (106, 'City Center Hotel', 'New York'), (107, 'Grand Palace', 'Dubai'), (108, 'Lakeview Inn', 'Zurich'), (109, 'Desert Oasis', 'Cairo'), (110, 'Riverside Retreat', 'Bangkok');
+Query OK, 10 rows affected (0.037 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+MariaDB [hotel]> INSERT INTO Room VALUES (1, 101, 'Single', 45.00), (2, 102, 'Double', 15.00), (3, 103, 'Family', 75.00), (4, 104, 'Double', 55.00), (5, 105, 'Single', 65.00), (6, 106, 'Family', 90.00), (7, 107, 'Double', 80.00), (8, 108, 'Single', 60.00), (9, 109, 'Family', 95.00), (10, 110, 'Double', 70.00);
+Query OK, 10 rows affected (0.030 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+MariaDB [hotel]> INSERT INTO Guest VALUES (1001, 'John Smith', 'London'), (1002, 'Ravi Kumar', 'India'), (1003, 'Amina Diallo', 'Egypt'), (1004, 'Chen Wei', 'China'), (1005, 'Sofia Rossi', 'Italy'), (1006, 'Liam O''Connor', 'Ireland'), (1007, 'Priya Sharma', 'India'), (1008, 'Nina Petrova', 'Russia'), (1009, 'Samuel Mensah', 'Ghana'), (1010, 'Isabel Garcia', 'Spain');
+Query OK, 10 rows affected (0.028 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+MariaDB [hotel]> INSERT INTO Booking VALUES (101, 1001, '2010-08-20', '2010-08-25', 1), (101, 1001, '2027-07-01', '2027-07-05', 1), (102, 1002, '2011-11-05', '2011-11-10', 2), (103, 1003, '2026-09-05', '2026-09-12', 3), (104, 1004, '2012-03-10', '2012-03-15', 4), (105, 1005, '2026-11-20', '2026-11-25', 5), (106, 1006, '2027-01-05', '2027-01-10', 6), (107, 1007, '2009-12-28', '2010-01-02', 7), (108, 1008, '2027-03-01', '2027-03-06', 8), (109, 1009, '2027-04-10', '2027-04-14', 9), (110, 1010, '2027-05-15', '2027-05-20', 10);
+Query OK, 11 rows affected (0.031 sec)
+Records: 11  Duplicates: 0  Warnings: 0
+
+
 Question 7.11
 
 (a), (b), (c)
 
 MariaDB [hotel]> alter table Room Add constraint chk_type check(type in ('Single', 'Double', 'Family')), Add constraint chk_price check (price between 10.00 and 100.00), Add constraint chk_roomNo check (roomNo between 1 and 100);
-Query OK, 0 rows affected (0.153 sec)
-Records: 0  Duplicates: 0  Warnings: 0
+Query OK, 10 rows affected (0.066 sec)
+Records: 10  Duplicates: 0  Warnings: 0
 
 (d)
 
 MariaDB [hotel]> alter table Booking Add constraint chk_dateOrder check (dateFrom < dateTo);
-Query OK, 0 rows affected (0.073 sec)
-Records: 0  Duplicates: 0  Warnings: 0
+Query OK, 11 rows affected (0.062 sec)
+Records: 11  Duplicates: 0  Warnings: 0
 
 MariaDB [hotel]> DELIMITER //
 MariaDB [hotel]>
@@ -48,7 +67,7 @@ MariaDB [hotel]> CREATE TRIGGER before_booking_insert
     ->         SET MESSAGE_TEXT = 'dateFrom must be before dateTo';
     ->     END IF;
     -> END//
-Query OK, 0 rows affected (0.051 sec)
+Query OK, 0 rows affected (0.015 sec)
 
 (e)
 
@@ -69,7 +88,7 @@ MariaDB [hotel]> CREATE TRIGGER trg_no_room_double_booking
     ->         SET MESSAGE_TEXT = 'Room is already booked for these dates';
     ->     END IF;
     -> END//
-Query OK, 0 rows affected (0.050 sec)
+Query OK, 0 rows affected (0.070 sec)
 
 (f)
 
@@ -90,28 +109,7 @@ MariaDB [hotel]> CREATE TRIGGER trg_no_guest_overlap
     ->         SET MESSAGE_TEXT = 'Guest already has a booking during these dates';
     ->     END IF;
     -> END//
-Query OK, 0 rows affected (0.048 sec)
-
-
--- Insertions
-
-MariaDB [hotel]> INSERT INTO Hotel VALUES (101, 'Grosvenor Hotel', 'London'), (102, 'Budget Inn', 'Mumbai');
-Query OK, 2 rows affected (0.030 sec)
-Records: 2  Duplicates: 0  Warnings: 0
-
-MariaDB [hotel]> INSERT INTO Room VALUES (1, 101, 'Single', 45.00), (2, 102, 'Double', 15.00);
-Query OK, 2 rows affected (0.043 sec)
-Records: 2  Duplicates: 0  Warnings: 0
-
-MariaDB [hotel]> INSERT INTO Guest VALUES (1001, 'John Smith', 'London'), (1002, 'Ravi Kumar', 'India');
-Query OK, 2 rows affected (0.003 sec)
-Records: 2  Duplicates: 0  Warnings: 0
-
-MariaDB [hotel]> INSERT INTO Booking VALUES (101, 1001, '2012-05-10', '2012-05-15', 1), (101, 1001, '2027-07-01', '2027-07-05', 1);
-ERROR 1644 (45000): Booking dates must be in the future
-MariaDB [hotel]> INSERT INTO Booking VALUES (101, 1001, '2026-07-10', '2026-07-15', 1), (101, 1001, '2027-07-01', '2027-07-05', 1);
-Query OK, 2 rows affected (0.041 sec)
-Records: 2  Duplicates: 0  Warnings: 0
+Query OK, 0 rows affected (0.050 sec)
 
 
 Question 7.12
@@ -120,17 +118,41 @@ MariaDB [hotel]> CREATE TABLE BookingArchive LIKE Booking;
 Query OK, 0 rows affected (0.031 sec)
 
 MariaDB [hotel]> insert into bookingArchive (Select * from Booking where dateFrom < '2013-01-01');
-Query OK, 0 rows affected (0.015 sec)
-Records: 0  Duplicates: 0  Warnings: 0
+Query OK, 4 rows affected (0.030 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+MariaDB [hotel]> select * from bookingarchive order by dateFrom;
++---------+---------+------------+------------+--------+
+| hotelNo | guestNo | dateFrom   | dateTo     | roomNo |
++---------+---------+------------+------------+--------+
+|     107 |    1007 | 2009-12-28 | 2010-01-02 |      7 |
+|     101 |    1001 | 2010-08-20 | 2010-08-25 |      1 |
+|     102 |    1002 | 2011-11-05 | 2011-11-10 |      2 |
+|     104 |    1004 | 2012-03-10 | 2012-03-15 |      4 |
++---------+---------+------------+------------+--------+
 
 MariaDB [hotel]> Delete from Booking where dateFrom < '2013-01-01';
-Query OK, 0 rows affected (0.031 sec)
+Query OK, 0 rows affected (0.030 sec)
+
+MariaDB [hotel]> select * from booking order by dateFrom;
++---------+---------+------------+------------+--------+
+| hotelNo | guestNo | dateFrom   | dateTo     | roomNo |
++---------+---------+------------+------------+--------+
+|     103 |    1003 | 2026-09-05 | 2026-09-12 |      3 |
+|     105 |    1005 | 2026-11-20 | 2026-11-25 |      5 |
+|     106 |    1006 | 2027-01-05 | 2027-01-10 |      6 |
+|     108 |    1008 | 2027-03-01 | 2027-03-06 |      8 |
+|     109 |    1009 | 2027-04-10 | 2027-04-14 |      9 |
+|     110 |    1010 | 2027-05-15 | 2027-05-20 |     10 |
+|     101 |    1001 | 2027-07-01 | 2027-07-05 |      1 |
++---------+---------+------------+------------+--------+
+7 rows in set (0.001 sec)
 
 
 Question 7.13
 
 MariaDB [hotel]> CREATE VIEW CheapestHotels AS SELECT h.hotelNo, h.hotelName, h.city, r.price FROM Hotel h JOIN Room r ON h.hotelNo = r.hotelNo WHERE r.price = (SELECT MIN(price) FROM Room);
-Query OK, 0 rows affected (0.019 sec)
+Query OK, 0 rows affected (0.038 sec)
 
 MariaDB [hotel]> select * from cheapesthotels;
 +---------+------------+--------+-------+
@@ -147,37 +169,14 @@ MariaDB [hotel]> Create View brics_guests_view AS (Select * from Guest where gue
 Query OK, 0 rows affected (0.034 sec)
 
 MariaDB [hotel]> select * from brics_guests_view;
-+---------+------------+--------------+
-| guestNo | guestName  | guestAddress |
-+---------+------------+--------------+
-|    1002 | Ravi Kumar | India        |
-+---------+------------+--------------+
-1 row in set (0.003 sec)
-
-
-Question 7.15
-
-MariaDB [hotel]> GRANT ALL PRIVILEGES ON CheapestHotels TO 'Manager', 'Director' WITH GRANT OPTION;
-ERROR 1133 (28000): Can't find any matching row in the user table
-
--- Create the system users first
-MariaDB [hotel]> CREATE USER 'Manager'@'localhost' IDENTIFIED BY 'Password123';
-Query OK, 0 rows affected (0.015 sec)
-MariaDB [hotel]> CREATE USER 'Director'@'localhost' IDENTIFIED BY 'Password123';
-Query OK, 0 rows affected (0.002 sec)
-MariaDB [hotel]> CREATE USER 'Accounts'@'localhost' IDENTIFIED BY 'Password123';
-Query OK, 0 rows affected (0.003 sec)
-
-MariaDB [hotel]> GRANT ALL PRIVILEGES ON CheapestHotels TO 'Manager'@'localhost', 'Director'@'localhost' WITH GRANT OPTION;
-Query OK, 0 rows affected (0.029 sec)
-MariaDB [hotel]> GRANT ALL PRIVILEGES ON BricsGuests TO 'Manager'@'localhost', 'Director'@'localhost' WITH GRANT OPTION;
-Query OK, 0 rows affected (0.027 sec)
-
-
-Question 7.16
-
-MariaDB [hotel]> GRANT SELECT ON CheapestHotels TO 'Accounts'@'localhost';
-Query OK, 0 rows affected (0.028 sec)
-MariaDB [hotel]> GRANT SELECT ON Brics_guests_view TO 'Accounts'@'localhost';
-Query OK, 0 rows affected (0.028 sec)
++---------+--------------+--------------+
+| guestNo | guestName    | guestAddress |
++---------+--------------+--------------+
+|    1002 | Ravi Kumar   | India        |
+|    1003 | Amina Diallo | Egypt        |
+|    1004 | Chen Wei     | China        |
+|    1007 | Priya Sharma | India        |
+|    1008 | Nina Petrova | Russia       |
++---------+--------------+--------------+
+5 rows in set (0.003 sec)
 

@@ -23,3 +23,39 @@ Query OK, 0 rows affected (0.009 sec)
 MariaDB [work]> CREATE TABLE WorksOn ( empNo CHAR(5) NOT NULL, projNo CHAR(5) NOT NULL, dateWorked DATE NOT NULL, hoursWorked INT NOT NULL, PRIMARY KEY (empNo, projNo, dateWorked), FOREIGN KEY (empNo) REFERENCES Employee(empNo), FOREIGN KEY (projNo) REFERENCES Project(projNo), CONSTRAINT chk_Hours CHECK (hoursWorked BETWEEN 0 AND 40));
 Query OK, 0 rows affected (0.010 sec)
 
+
+-- Let's pupolate our database
+
+MariaDB [work]> INSERT INTO Department (deptNo, deptName, mgrEmpNo) VALUES ('D001', 'IT and Infrastructure', NULL), ('D002', 'Planning & Strategy', NULL), ('D003', 'Human Resources', NULL), ('D004', 'Finance & Accounting', NULL), ('D005', 'Research & Development', NULL), ('D006', 'Marketing & Sales', NULL), ('D007', 'Customer Success', NULL), ('D008', 'Legal & Compliance', NULL), ('D009', 'Quality Assurance', NULL), ('D010', 'Operations', NULL);
+Query OK, 10 rows affected (0.006 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+MariaDB [work]> INSERT INTO Employee (empNo, fName, lName, address, DOB, sex, position, deptNo) VALUES ('E0001', 'Alice', 'Smith', '123 Maple St', '1985-04-12', 'F', 'Manager', 'D001'), ('E0002', 'Bob', 'Jones', '456 Oak Ave', '1992-08-23', 'M', 'Software Developer', 'D001'), ('E0003', 'Carol', 'Taylor', '789 Pine Rd', '1988-11-02', 'F', 'Team Leader', 'D002'), ('E0004', 'David', 'Brown', '101 Cedar Ln', '1995-01-15', 'M', 'Analyst', 'D002'), ('E0005', 'Emma', 'Davis', '202 Birch Dr', '1991-06-30', 'F', 'Manager', 'D005'), ('E0006', 'Frank', 'Miller', '303 Elm St', '1983-09-18', 'M', 'Team Leader', 'D005'), ('E0007', 'Grace', 'Wilson', '404 Walnut Av', '1994-03-22', 'F', 'Software Developer', 'D005'), ('E0008', 'Henry', 'Moore', '505 Ash Rd', '1979-12-05', 'M', 'Manager', 'D004'), ('E0009', 'Ivy', 'Thomas', '606 Cherry Ln', '1996-07-14', 'F', 'Analyst', 'D001'), ('E0010', 'Jack', 'Anderson', '707 Plum St', '1990-10-25', 'M', 'Software Developer', 'D009');
+Query OK, 10 rows affected (0.005 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+
+-- Give the departments their managers
+
+MariaDB [work]> UPDATE Department SET mgrEmpNo = 'E0001' WHERE deptNo = 'D001';
+Query OK, 1 row affected (0.009 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+MariaDB [work]> UPDATE Department SET mgrEmpNo = 'E0003' WHERE deptNo = 'D002';
+Query OK, 1 row affected (0.001 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+MariaDB [work]> UPDATE Department SET mgrEmpNo = 'E0005' WHERE deptNo = 'D005';
+Query OK, 1 row affected (0.001 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+MariaDB [work]> UPDATE Department SET mgrEmpNo = 'E0008' WHERE deptNo = 'D004';
+Query OK, 1 row affected (0.002 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+
+MariaDB [work]> INSERT INTO Project (projNo, projName, deptNo) VALUES ('P0001', 'Cloud Migration', 'D001'), ('SCCS', 'Secure Core Control Sys', 'D001'), ('P0003', 'Q3 Strategic Mapping', 'D002'), ('P0004', 'HR Portal Automation', 'D003'), ('P0005', 'AI Predictive Engine', 'D005'), ('P0006', 'ERP Ledger Integration', 'D004'), ('P0007', 'Global Ad Campaign', 'D006'), ('P0008', 'CRM System Overhaul', 'D007'), ('P0009', 'GDPR Compliance Audit', 'D008'), ('P0010', 'Automated QA Pipelines', 'D009');
+Query OK, 10 rows affected (0.001 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+MariaDB [work]> INSERT INTO WorksOn (empNo, projNo, dateWorked, hoursWorked) VALUES ('E0001', 'P0001', '2026-06-01', 10), ('E0001', 'SCCS', '2026-06-02', 15), ('E0002', 'SCCS', '2026-06-02', 40), ('E0002', 'P0001', '2026-06-03', 25), ('E0003', 'P0003', '2026-06-01', 35), ('E0004', 'P0003', '2026-06-02', 20), ('E0005', 'P0005', '2026-06-01', 12), ('E0006', 'P0005', '2026-06-02', 38), ('E0007', 'P0005', '2026-06-03', 30), ('E0009', 'SCCS', '2026-06-04', 18);
+Query OK, 10 rows affected (0.005 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+

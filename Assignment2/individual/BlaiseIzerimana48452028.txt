@@ -100,3 +100,19 @@ MariaDB [work]> select * from EmpProjectDetails;
 | E0009 | Ivy   | Thomas | Secure Core Control Sys |          18 |
 +-------+-------+--------+-------------------------+-------------+
 10 rows in set (0.002 sec)
+
+7.27 Consider the following view defined on the Projects schema:
+
+      CREATE VIEW EmpProject(empNo, projNo, totalHours)
+      AS SELECT w.empNo, w.projNo, SUM(hours Worked)
+      FROM Employee e, Project p, WorksOn w
+      WHERE e.empNo = w.empNo AND p.projNo = w.projNo
+      GROUP BY w.empNo, w.projNo;
+
+(a) SELECT* FROM EmpProject;
+
+(b) SELECT projNo FROM EmpProject WHERE projNo = 'SCCS';
+
+(c) SELECT COUNT(projNo) FROM EmpProject WHERE empNo = 'E1';
+
+(d) SELECT empNo, totalHours FROM EmpProject GROUP BY empNo;

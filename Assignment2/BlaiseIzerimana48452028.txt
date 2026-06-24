@@ -16,6 +16,7 @@ Query OK, 0 rows affected (0.038 sec)
 MariaDB [hotel]> create table Booking (hotelNo int not null, guestNo int not null, dateFrom date not null, dateTo date, roomNo int not null, foreign key (hotelNo) references hotel (hotelNo), foreign key (guestNo) references Guest (guestNo), foreign key (roomNo) references Room (roomNo), primary key (hotelNo, guestNo, dateFrom));
 Query OK, 0 rows affected (0.039 sec)
 
+
 Question 7.11
 
 (a), (b), (c)
@@ -129,12 +130,56 @@ Query OK, 0 rows affected (0.031 sec)
 Question 7.13
 
 MariaDB [hotel]> CREATE VIEW CheapestHotels AS SELECT h.hotelNo, h.hotelName, h.city, r.price FROM Hotel h JOIN Room r ON h.hotelNo = r.hotelNo WHERE r.price = (SELECT MIN(price) FROM Room);
-Query OK, 0 rows affected (0.042 sec)
+Query OK, 0 rows affected (0.019 sec)
 
-Question 7.13
+MariaDB [hotel]> select * from cheapesthotels;
++---------+------------+--------+-------+
+| hotelNo | hotelName  | city   | price |
++---------+------------+--------+-------+
+|     102 | Budget Inn | Mumbai | 15.00 |
++---------+------------+--------+-------+
+1 row in set (0.037 sec)
+
+
+Question 7.14
 
 MariaDB [hotel]> Create View brics_guests_view AS (Select * from Guest where guestAddress IN ('Brazil', 'Russia', 'India', 'China', 'South Africa', 'Egypt', 'Ethiopia', 'Indonesia', 'Iran', 'Saudi Arabia', 'United Arab Emirates'));
-Query OK, 0 rows affected (0.010 sec)
+Query OK, 0 rows affected (0.034 sec)
+
+MariaDB [hotel]> select * from brics_guests_view;
++---------+------------+--------------+
+| guestNo | guestName  | guestAddress |
++---------+------------+--------------+
+|    1002 | Ravi Kumar | India        |
++---------+------------+--------------+
+1 row in set (0.003 sec)
+
+
+Question 7.15
+
+MariaDB [hotel]> GRANT ALL PRIVILEGES ON CheapestHotels TO 'Manager', 'Director' WITH GRANT OPTION;
+ERROR 1133 (28000): Can't find any matching row in the user table
+
+-- Create the system users first
+MariaDB [hotel]> CREATE USER 'Manager'@'localhost' IDENTIFIED BY 'Password123';
+Query OK, 0 rows affected (0.015 sec)
+MariaDB [hotel]> CREATE USER 'Director'@'localhost' IDENTIFIED BY 'Password123';
+Query OK, 0 rows affected (0.002 sec)
+MariaDB [hotel]> CREATE USER 'Accounts'@'localhost' IDENTIFIED BY 'Password123';
+Query OK, 0 rows affected (0.003 sec)
+
+MariaDB [hotel]> GRANT ALL PRIVILEGES ON CheapestHotels TO 'Manager'@'localhost', 'Director'@'localhost' WITH GRANT OPTION;
+Query OK, 0 rows affected (0.029 sec)
+MariaDB [hotel]> GRANT ALL PRIVILEGES ON BricsGuests TO 'Manager'@'localhost', 'Director'@'localhost' WITH GRANT OPTION;
+Query OK, 0 rows affected (0.027 sec)
+
+
+Question 7.16
+
+MariaDB [hotel]> GRANT SELECT ON CheapestHotels TO 'Accounts'@'localhost';
+Query OK, 0 rows affected (0.028 sec)
+MariaDB [hotel]> GRANT SELECT ON Brics_guests_view TO 'Accounts'@'localhost';
+Query OK, 0 rows affected (0.028 sec)
 
 
 MariaDB [hotel]> insert into hotel values(101, 'Hilton Essence Hotel', 'Accra'), (102, 'Accra Luxury', 'Accra'), (103, 'The diamond', 'Accra'), (104, 'MAAT luxury homes', 'Accra'), (105, 'Kumasi Luxury Appartments', 'Kumasi'),(106, 'Accra Luxury Homes', 'Achimota') ,(107, 'Lemon Beach Resort', 'Elimna'), (108, 'Pito Guest House', 'Elmina'), (109, 'Oak Plaza Suits', 'Kumasi');

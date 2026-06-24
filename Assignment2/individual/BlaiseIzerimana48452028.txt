@@ -59,3 +59,44 @@ MariaDB [work]> INSERT INTO WorksOn (empNo, projNo, dateWorked, hoursWorked) VAL
 Query OK, 10 rows affected (0.005 sec)
 Records: 10  Duplicates: 0  Warnings: 0
 
+
+
+Question 7.25
+
+MariaDB [work]> CREATE VIEW FemaleManagedProjects AS SELECT p.projNo, p.projName, p.deptNo FROM Project p JOIN Department d ON p.deptNo = d.deptNo JOIN Employee e ON d.mgrEmpNo = e.empNo WHERE e.sex = 'F' ORDER BY p.projNo;
+Query OK, 0 rows affected (0.008 sec)
+
+MariaDB [work]> select * from FemaleManagedProjects;
++--------+-------------------------+--------+
+| projNo | projName                | deptNo |
++--------+-------------------------+--------+
+| P0001  | Cloud Migration         | D001   |
+| P0003  | Q3 Strategic Mapping    | D002   |
+| P0005  | AI Predictive Engine    | D005   |
+| SCCS   | Secure Core Control Sys | D001   |
++--------+-------------------------+--------+
+4 rows in set (0.006 sec)
+
+
+
+Question 7.26
+
+MariaDB [work]> CREATE VIEW EmpProjectDetails AS SELECT e.empNo, e.fName, e.lName, p.projName, w.hoursWorked FROM WorksOn w JOIN Employee e ON w.empNo = e.empNo JOIN Project p ON w.projNo = p.projNo;
+Query OK, 0 rows affected (0.008 sec)
+
+MariaDB [work]> select * from EmpProjectDetails;
++-------+-------+--------+-------------------------+-------------+
+| empNo | fName | lName  | projName                | hoursWorked |
++-------+-------+--------+-------------------------+-------------+
+| E0001 | Alice | Smith  | Cloud Migration         |          10 |
+| E0001 | Alice | Smith  | Secure Core Control Sys |          15 |
+| E0002 | Bob   | Jones  | Cloud Migration         |          25 |
+| E0002 | Bob   | Jones  | Secure Core Control Sys |          40 |
+| E0003 | Carol | Taylor | Q3 Strategic Mapping    |          35 |
+| E0004 | David | Brown  | Q3 Strategic Mapping    |          20 |
+| E0005 | Emma  | Davis  | AI Predictive Engine    |          12 |
+| E0006 | Frank | Miller | AI Predictive Engine    |          38 |
+| E0007 | Grace | Wilson | AI Predictive Engine    |          30 |
+| E0009 | Ivy   | Thomas | Secure Core Control Sys |          18 |
++-------+-------+--------+-------------------------+-------------+
+10 rows in set (0.002 sec)

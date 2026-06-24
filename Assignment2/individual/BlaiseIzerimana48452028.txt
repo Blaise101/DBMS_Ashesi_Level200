@@ -171,3 +171,18 @@ MariaDB [work]> SELECT empNo, totalHours FROM EmpProject GROUP BY empNo;
 | E0009 |         18 |
 +-------+------------+
 8 rows in set (0.002 sec)
+
+
+-- Analysis
+
+(a) SELECT * FROM EmpProject;
+       Displays a summary of the total cumulative hours worked by each unique employee on each unique project.
+
+(b) SELECT projNo FROM EmpProject WHERE projNo = 'SCCS';
+       Returns a list of project numbers (all reading 'SCCS') for every employee assigned to it.
+
+(c) SELECT COUNT(projNo) FROM EmpProject WHERE empNo = 'E1';
+       Counts the total number of distinct projects that employee 'E1' has logged hours towards.
+
+(d) SELECT empNo, totalHours FROM EmpProject GROUP BY empNo;
+       Retirns the total overall hours an employee worked across all projects.

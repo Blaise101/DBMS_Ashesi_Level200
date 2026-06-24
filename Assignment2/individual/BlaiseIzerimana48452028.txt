@@ -1,0 +1,25 @@
+MariaDB [(none)]> create database work;
+Query OK, 1 row affected (0.003 sec)
+
+MariaDB [(none)]> use work;
+Database changed
+
+
+Question 7.24
+
+MariaDB [work]> CREATE TABLE Department (deptNo CHAR(4) PRIMARY KEY,deptName VARCHAR(50) NOT NULL,mgrEmpNo CHAR(5));
+Query OK, 0 rows affected (0.011 sec)
+
+MariaDB [work]> CREATE TABLE Employee ( empNo CHAR(5) PRIMARY KEY, fName VARCHAR(30) NOT NULL, lName VARCHAR(30) NOT NULL, address VARCHAR(100), DOB DATE, sex CHAR(1) NOT NULL, position VARCHAR(30) NOT NULL, deptNo CHAR(4), FOREIGN KEY (deptNo) REFERENCES Department(deptNo), CONSTRAINT chk_Employee CHECK (sex IN ('M', 'F') AND position IN ('Manager', 'Team Leader', 'Analyst', 'Software Developer')));
+Query OK, 0 rows affected (0.009 sec)
+
+MariaDB [work]> ALTER TABLE Department ADD FOREIGN KEY (mgrEmpNo) REFERENCES Employee(empNo);
+Query OK, 0 rows affected (0.020 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [work]> CREATE TABLE Project ( projNo CHAR(5) PRIMARY KEY, projName VARCHAR(50) NOT NULL, deptNo CHAR(4) NOT NULL, FOREIGN KEY (deptNo) REFERENCES Department(deptNo));
+Query OK, 0 rows affected (0.009 sec)
+
+MariaDB [work]> CREATE TABLE WorksOn ( empNo CHAR(5) NOT NULL, projNo CHAR(5) NOT NULL, dateWorked DATE NOT NULL, hoursWorked INT NOT NULL, PRIMARY KEY (empNo, projNo, dateWorked), FOREIGN KEY (empNo) REFERENCES Employee(empNo), FOREIGN KEY (projNo) REFERENCES Project(projNo), CONSTRAINT chk_Hours CHECK (hoursWorked BETWEEN 0 AND 40));
+Query OK, 0 rows affected (0.010 sec)
+

@@ -186,3 +186,92 @@ MariaDB [work]> SELECT empNo, totalHours FROM EmpProject GROUP BY empNo;
 
 (d) SELECT empNo, totalHours FROM EmpProject GROUP BY empNo;
        Retirns the total overall hours an employee worked across all projects.
+
+Question 7.28
+
+-- How would we maintain this as a materialized view?
+       To keep 'ExpensiveParts' up to date when rows in 'Part' are inserted, updated, or deleted, we have two strategies we can use. first is to set up triggers on 'Part' that run and update the materialized the moment the rows change.
+
+-- How do we maintain the view without having to access the base table?
+       To maintain the view without scanning the entire underlying Part table from scratch, we need to use an Incremental Refresh where instead of reading the whole table, we only look at the specific rows that were just modified.
+
+
+-- Queries
+
+--The base table
+MariaDB [hotel]> CREATE TABLE Part (partNo VARCHAR(10), contract VARCHAR(10), partCost DECIMAL(10, 2), PRIMARY KEY (partNo, contract));
+Query OK, 0 rows affected (0.076 sec)
+
+-- the materialized view table
+MariaDB [hotel]> CREATE TABLE MV_ExpensiveParts ( partNo VARCHAR(10) PRIMARY KEY, qualifying_count INT DEFAULT 1);
+Query OK, 0 rows affected (0.038 sec)
+
+-- Trigger that Handles inserts
+MariaDB [hotel]> DELIMITER //
+MariaDB [hotel]> CREATE TRIGGER trg_Part_Insert
+    -> AFTER INSERT ON Part
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     IF NEW.partCost > 1000 THEN
+    ->         INSERT INTO MV_ExpensiveParts (partNo, qualifying_count)
+    ->         VALUES (NEW.partNo, 1)
+    ->         ON DUPLICATE KEY UPDATE qualifying_count = qualifying_count + 1;
+    ->     END IF;
+    -> END //
+Query OK, 0 rows affected (0.060 sec)
+
+-- Trigger that Handles deletes
+MariaDB [hotel]> DELIMITER //
+MariaDB [hotel]> CREATE TRIGGER trg_Part_Delete
+    -> AFTER DELETE ON Part
+    -> FOR EACH ROW
+    -> BEGIN
+    ->     IF OLD.partCost > 1000 THEN
+    ->         -- Decrement the count for this part
+    ->         UPDATE MV_ExpensiveParts
+    ->         SET qualifying_count = qualifying_count - 1
+    ->         WHERE partNo = OLD.partNo;
+    ->
+    ->         -- Clean up the row if no contracts price it > 1000 anymore
+    ->         DELETE FROM MV_ExpensiveParts WHERE qualifying_count <= 0;
+    ->     END IF;
+    -> END //
+Query OK, 0 rows affected (0.065 sec)
+
+
+-- Let's test to prove if it works
+
+
+-- 1. Insert an inexpensive part (Should NOT appear in the MV)
+MariaDB [hotel]> INSERT INTO Part VALUES ('P1', 'CNT-A', 500.00);
+Query OK, 1 row affected (0.049 sec)
+
+-- 2. Insert an expensive part under Contract A (Should appear in MV with count = 1)
+MariaDB [hotel]> INSERT INTO Part VALUES ('P2', 'CNT-A', 1200.00);
+Query OK, 1 row affected (0.004 sec)
+
+-- 3. Insert the SAME part number under Contract B, also expensive (Count should become 2)
+MariaDB [hotel]> INSERT INTO Part VALUES ('P2', 'CNT-B', 1500.00);
+Query OK, 1 row affected (0.006 sec)
+
+MariaDB [hotel]> SELECT * FROM MV_ExpensiveParts;
++--------+------------------+
+| partNo | qualifying_count |
++--------+------------------+
+| P2     |                2 |
++--------+------------------+
+1 row in set (0.035 sec)
+
+
+-- let's test delete behavior (No Base Table Scan)
+
+MariaDB [hotel]> DELETE FROM Part WHERE partNo = 'P2' AND contract = 'CNT-A';
+Query OK, 1 row affected (0.043 sec)
+
+MariaDB [hotel]> SELECT * FROM MV_ExpensiveParts;
++--------+------------------+
+| partNo | qualifying_count |
++--------+------------------+
+| P2     |                1 |
++--------+------------------+
+1 row in set (0.002 sec)

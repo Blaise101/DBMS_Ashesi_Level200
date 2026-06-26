@@ -180,3 +180,93 @@ MariaDB [hotel]> select * from brics_guests_view;
 +---------+--------------+--------------+
 5 rows in set (0.003 sec)
 
+Question 7.15
+
+Question 7.16
+
+Question 7.17
+
+MariaDB [hotel]> CREATE VIEW HotelBookingCount (hotelNo, bookingCount) AS SELECT h.hotelNo, COUNT(*) FROM Hotel h, Room r, Booking b WHERE h.hotelNo = r.hotelNo AND r.roomNo = b.roomNo GROUP BY h.hotelNo;
+Query OK, 0 rows affected (0.048 sec)
+
+(a) SELECT * FROM HotelBookingCount; (Valid).
+
+status: Valid
+Base table Mapping:
+
+MariaDB [hotel]> SELECT h.hotelNo, COUNT(*) AS bookingCount FROM Hotel h, Room r, Booking b WHERE h.hotelNo = r.hotelNo AND r.roomNo = b.roomNo GROUP BY h.hotelNo;
++---------+--------------+
+| hotelNo | bookingCount |
++---------+--------------+
+|     101 |            1 |
+|     103 |            1 |
+|     105 |            1 |
+|     106 |            1 |
+|     108 |            1 |
+|     109 |            1 |
+|     110 |            1 |
++---------+--------------+
+7 rows in set (0.001 sec)
+
+
+(b) SELECT hotelNo FROM HotelBookingCount WHERE hotelNo = 'H001';
+
+Status: Valid
+Base Table Mapping:
+
+MariaDB [hotel]> SELECT h.hotelNo FROM Hotel h, Room r, Booking b WHERE h.hotelNo = r.hotelNo AND r.roomNo = b.roomNo AND h.hotelNo = 'H001' GROUP BY h.hotelNo;
+Empty set (0.027 sec)
+
+(c) SELECT MIN(bookingCount) FROM HotelBookingCount;
+
+Status: Valid
+Base Table Mapping:
+
+MariaDB [hotel]> SELECT MIN(temp.bookingCount) FROM ( SELECT COUNT(*) AS bookingCount FROM Hotel h, Room r, Booking b WHERE h.hotelNo = r.hotelNo AND r.roomNo = b.roomNo GROUP BY h.hotelNo ) temp;
++------------------------+
+| MIN(temp.bookingCount) |
++------------------------+
+|                      1 |
++------------------------+
+1 row in set (0.027 sec)
+
+(d) SELECT COUNT(*) FROM HotelBookingCount;
+
+Status: Valid
+Base Table Mapping:
+
+MariaDB [hotel]> SELECT COUNT(*) FROM ( SELECT h.hotelNo FROM Hotel h, Room r, Booking b WHERE h.hotelNo = r.hotelNo AND r.roomNo = b.roomNo GROUP BY h.hotelNo) temp;
++----------+
+| COUNT(*) |
++----------+
+|        7 |
++----------+
+1 row in set (0.002 sec)
+
+(e) SELECT hotelNo FROM HotelBookingCount WHERE bookingCount > 1000;
+
+Status: Valid
+Base Table Mapping:
+
+MariaDB [hotel]> SELECT h.hotelNo FROM Hotel h, Room r, Booking b WHERE h.hotelNo = r.hotelNo AND r.roomNo = b.roomNo GROUP BY h.hotelNo HAVING COUNT(*) > 1000;
+Empty set (0.001 sec)
+
+(f) SELECT hotelNo FROM HotelBookingCount ORDER BY bookingCount;
+
+Status: Valid
+Base Table Mapping:
+
+MariaDB [hotel]> SELECT h.hotelNo FROM Hotel h, Room r, Booking b WHERE h.hotelNo = r.hotelNo AND r.roomNo = b.roomNo GROUP BY h.hotelNo ORDER BY COUNT(*);
++---------+
+| hotelNo |
++---------+
+|     101 |
+|     103 |
+|     105 |
+|     106 |
+|     108 |
+|     109 |
+|     110 |
++---------+
+7 rows in set (0.022 sec)
+

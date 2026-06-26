@@ -270,3 +270,14 @@ MariaDB [hotel]> SELECT h.hotelNo FROM Hotel h, Room r, Booking b WHERE h.hotelN
 +---------+
 7 rows in set (0.022 sec)
 
+Question 7.19 
+
+-- Let's create supplier table first
+
+MariaDB [hotel]> CREATE TABLE Supplier ( supplierNo VARCHAR(10), partNo VARCHAR(10), price DECIMAL(10, 2), PRIMARY KEY (supplierNo, partNo));
+Query OK, 0 rows affected (0.056 sec)
+
+-- then create our view
+
+MariaDB [hotel]> CREATE VIEW SupplierParts (partNo) AS SELECT DISTINCT s.partNo FROM Supplier s, Part p WHERE s.partNo = p.partNo;
+Query OK, 0 rows affected (0.033 sec)

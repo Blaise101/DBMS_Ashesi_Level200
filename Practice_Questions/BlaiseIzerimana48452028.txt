@@ -1,0 +1,6 @@
+MariaDB [(none)]> create database fact_library;
+Query OK, 1 row affected (0.007 sec)
+
+MariaDB [(none)]> use fact_library;
+Database changed
+MariaDB [fact_library]>

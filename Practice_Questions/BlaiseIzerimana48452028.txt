@@ -618,3 +618,67 @@ MariaDB [fact_library]> SELECT AU_ID, AU_FNAME, AU_LNAME FROM AUTHOR WHERE Au_Bi
 |   603 | Julia    | Palca     |
 +-------+----------+-----------+
 12 rows in set (0.001 sec)
+
+(21)
+MariaDB [fact_library]> SELECT CHECK_NUM, BOOK_NUM, PAT_ID, CHECK_OUT_DATE, CHECK_DUE_DATE FROM CHECKOUT WHERE Check_In_Date IS NULL ORDER BY Book_Num ASC;
++-----------+----------+--------+----------------+----------------+
+| CHECK_NUM | BOOK_NUM | PAT_ID | CHECK_OUT_DATE | CHECK_DUE_DATE |
++-----------+----------+--------+----------------+----------------+
+|     91068 |     5238 |   1229 | 2015-05-24     | 2015-05-31     |
+|     91053 |     5240 |   1212 | 2015-05-09     | 2015-05-16     |
+|     91066 |     5242 |   1228 | 2015-05-19     | 2015-05-26     |
+|     91061 |     5246 |   1172 | 2015-05-15     | 2015-05-22     |
+|     91059 |     5249 |   1207 | 2015-05-10     | 2015-05-17     |
+|     91067 |     5252 |   1229 | 2015-05-24     | 2015-05-31     |
++-----------+----------+--------+----------------+----------------+
+6 rows in set (0.002 sec)
+
+(22)
+MariaDB [fact_library]> SELECT AU_ID, AU_FNAME, AU_LNAME, AU_BIRTHYEAR FROM AUTHOR ORDER BY Au_BirthYear DESC, Au_LName ASC;
++-------+----------+-----------+--------------+
+| AU_ID | AU_FNAME | AU_LNAME  | AU_BIRTHYEAR |
++-------+----------+-----------+--------------+
+|   185 | Benson   | Reeves    |         1990 |
+|   603 | Julia    | Palca     |         1988 |
+|   438 | Perry    | Pearson   |         1986 |
+|   581 | Manish   | Aggerwal  |         1984 |
+|   218 | Rachel   | Beatney   |         1983 |
+|   460 | Connie   | Paulsen   |         1983 |
+|   394 | Robert   | Lake      |         1982 |
+|   383 | Neal     | Walsh     |         1980 |
+|   592 | Lawrence | Sheel     |         1976 |
+|   251 | Hugo     | Bruer     |         1972 |
+|   273 | Reba     | Durante   |         1969 |
+|   284 | Trina    | Tankersly |         1961 |
+|   262 | Xia      | Chiang    |         NULL |
+|   559 | Rachel   | McGill    |         NULL |
+|   229 | Carmine  | Salvadore |         NULL |
++-------+----------+-----------+--------------+
+15 rows in set (0.002 sec)
+
+(23)
+MariaDB [fact_library]> SELECT COUNT(*) AS `Number of Books` FROM BOOK;
++-----------------+
+| Number of Books |
++-----------------+
+|              20 |
++-----------------+
+1 row in set (0.027 sec)
+
+(24)
+MariaDB [fact_library]> SELECT COUNT(DISTINCT Book_Subject) AS `Number of Subjects` FROM BOOK;
++--------------------+
+| Number of Subjects |
++--------------------+
+|                  4 |
++--------------------+
+1 row in set (0.027 sec)
+
+(25)
+MariaDB [fact_library]> SELECT COUNT(*) AS `Available Books` FROM BOOK WHERE Book_Num NOT IN ( SELECT Book_Num  FROM CHECKOUT  WHERE Check_In_Date IS NULL );
++-----------------+
+| Available Books |
++-----------------+
+|              14 |
++-----------------+
+1 row in set (0.034 sec)

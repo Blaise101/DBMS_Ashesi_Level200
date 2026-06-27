@@ -1,6 +1,26 @@
+-- Create the database
+
 MariaDB [(none)]> create database fact_library;
 Query OK, 1 row affected (0.007 sec)
 
 MariaDB [(none)]> use fact_library;
 Database changed
 MariaDB [fact_library]>
+
+
+-- Create tables
+
+MariaDB [fact_library]> CREATE TABLE PATRON ( Pat_ID INT PRIMARY KEY, Pat_FName VARCHAR(100) NOT NULL, Pat_LName VARCHAR(100) NOT NULL, Pat_Type VARCHAR(50) NOT NULL);
+Query OK, 0 rows affected (0.065 sec)
+
+MariaDB [fact_library]> CREATE TABLE AUTHOR ( Au_ID INT PRIMARY KEY, Au_FName VARCHAR(100) NOT NULL, Au_LName VARCHAR(100) NOT NULL, Au_BirthYear INT NULL);
+Query OK, 0 rows affected (0.036 sec)
+
+MariaDB [fact_library]> CREATE TABLE BOOK ( Book_Num INT PRIMARY KEY, Book_Title VARCHAR(255) NOT NULL, Book_Year INT NOT NULL, Book_Cost DECIMAL(10, 2) NOT NULL, Book_Subject VARCHAR(100) NOT NULL, Pat_ID INT NULL, FOREIGN KEY (Pat_ID) REFERENCES PATRON(Pat_ID) ON DELETE SET NULL );
+Query OK, 0 rows affected (0.045 sec)
+
+MariaDB [fact_library]> CREATE TABLE WRITES ( Book_Num INT, Au_ID INT, PRIMARY KEY (Book_Num, Au_ID), FOREIGN KEY (Book_Num) REFERENCES BOOK(Book_Num) ON DELETE CASCADE, FOREIGN KEY (Au_ID) REFERENCES AUTHOR(Au_ID) ON DELETE CASCADE );
+Query OK, 0 rows affected (0.041 sec)
+
+MariaDB [fact_library]> CREATE TABLE CHECKOUT ( Check_Num INT PRIMARY KEY, Book_Num INT NOT NULL, Pat_ID INT NOT NULL, Check_Out_Date DATE NOT NULL, Check_Due_Date DATE NOT NULL, Check_In_Date DATE NULL, FOREIGN KEY (Book_Num) REFERENCES BOOK(Book_Num) ON DELETE CASCADE, FOREIGN KEY (Pat_ID) REFERENCES PATRON(Pat_ID) ON DELETE CASCADE );
+Query OK, 0 rows affected (0.043 sec)

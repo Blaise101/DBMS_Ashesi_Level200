@@ -511,3 +511,110 @@ MariaDB [fact_library]> SELECT AU_ID, AU_FNAME, AU_LNAME, AU_BIRTHYEAR FROM AUTH
 |   603 | Julia    | Palca    |         1988 |
 +-------+----------+----------+--------------+
 7 rows in set (0.027 sec)
+
+(16)
+MariaDB [fact_library]> SELECT BOOK_NUM, BOOK_TITLE, BOOK_YEAR FROM BOOK WHERE BOOK_TITLE LIKE '%Database%';
++----------+-----------------------------------------------------------------------+-----------+
+| BOOK_NUM | BOOK_TITLE                                                            | BOOK_YEAR |
++----------+-----------------------------------------------------------------------+-----------+
+|     5236 | Database in the Cloud                                                 |      2012 |
+|     5237 | Mastering the database environment                                    |      2013 |
+|     5243 | DATABASES in Theory                                                   |      2013 |
+|     5248 | What You Always Wanted to Know About Database, But Were Afraid to Ask |      2014 |
+|     5252 | Beyond the Database Veil                                              |      2014 |
++----------+-----------------------------------------------------------------------+-----------+
+5 rows in set (0.027 sec)
+
+(17)
+MariaDB [fact_library]> SELECT PAT_ID, PAT_FNAME, PAT_LNAME FROM PATRON WHERE Pat_Type = 'Student';
++--------+-----------+------------+
+| PAT_ID | PAT_FNAME | PAT_LNAME  |
++--------+-----------+------------+
+|   1166 | Vera      | Alvarado   |
+|   1171 | Peggy     | Marsh      |
+|   1172 | Tony      | Miles      |
+|   1174 | Betsy     | Malone     |
+|   1180 | Nadine    | Blair      |
+|   1181 | Allen     | Horne      |
+|   1182 | Jamal     | Melendez   |
+|   1184 | Jimmie    | Love       |
+|   1185 | Sandra    | Yang       |
+|   1200 | Lorenzo   | Torres     |
+|   1201 | Shelby    | Noble      |
+|   1202 | Holly     | Anthony    |
+|   1203 | Tyler     | Pope       |
+|   1204 | Thomas    | Duran      |
+|   1205 | Claire    | Gomez      |
+|   1207 | Iva       | Ramos      |
+|   1208 | Ollie     | Cantrell   |
+|   1209 | Rena      | Mathis     |
+|   1210 | Keith     | Cooley     |
+|   1211 | Jerald    | Gaines     |
+|   1212 | Iva       | McClain    |
+|   1213 | Desiree   | Rivas      |
+|   1214 | Marina    | King       |
+|   1215 | Maureen   | Downs      |
+|   1218 | Angel     | Terrell    |
+|   1219 | Desiree   | Harrington |
+|   1220 | Carlton   | Morton     |
+|   1221 | Gloria    | Pitts      |
+|   1222 | Zach      | Kelly      |
+|   1223 | Jose      | Hays       |
+|   1224 | Jewel     | England    |
+|   1225 | Wilfred   | Fuller     |
+|   1226 | Jeff      | Owens      |
+|   1227 | Alicia    | Dickson    |
+|   1228 | Homer     | Goodman    |
+|   1229 | Gerald    | Burke      |
+|   1237 | Brandi    | Larson     |
+|   1238 | Erika     | Bowen      |
+|   1239 | Elton     | Irwin      |
+|   1240 | Jan       | Joyce      |
+|   1241 | Irene     | West       |
+|   1242 | Mario     | King       |
+|   1243 | Roberto   | Kennedy    |
+|   1244 | Leon      | Richmond   |
++--------+-----------+------------+
+44 rows in set (0.001 sec)
+
+(18)
+MariaDB [fact_library]> SELECT PAT_ID, PAT_FNAME, PAT_LNAME, PAT_TYPE FROM PATRON WHERE PAT_LNAME LIKE 'C%';
++--------+-----------+-----------+----------+
+| PAT_ID | PAT_FNAME | PAT_LNAME | PAT_TYPE |
++--------+-----------+-----------+----------+
+|   1160 | robert    | carter    | Faculty  |
+|   1208 | Ollie     | Cantrell  | Student  |
+|   1210 | Keith     | Cooley    | STUdent  |
++--------+-----------+-----------+----------+
+3 rows in set (0.002 sec)
+
+(19)
+MariaDB [fact_library]> SELECT AU_ID, AU_FNAME, AU_LNAME FROM AUTHOR WHERE Au_BirthYear IS NULL;
++-------+----------+-----------+
+| AU_ID | AU_FNAME | AU_LNAME  |
++-------+----------+-----------+
+|   229 | Carmine  | Salvadore |
+|   262 | Xia      | Chiang    |
+|   559 | Rachel   | McGill    |
++-------+----------+-----------+
+3 rows in set (0.001 sec)
+
+(20)
+MariaDB [fact_library]> SELECT AU_ID, AU_FNAME, AU_LNAME FROM AUTHOR WHERE Au_BirthYear IS NOT NULL;
++-------+----------+-----------+
+| AU_ID | AU_FNAME | AU_LNAME  |
++-------+----------+-----------+
+|   185 | Benson   | Reeves    |
+|   218 | Rachel   | Beatney   |
+|   251 | Hugo     | Bruer     |
+|   273 | Reba     | Durante   |
+|   284 | Trina    | Tankersly |
+|   383 | Neal     | Walsh     |
+|   394 | Robert   | Lake      |
+|   438 | Perry    | Pearson   |
+|   460 | Connie   | Paulsen   |
+|   581 | Manish   | Aggerwal  |
+|   592 | Lawrence | Sheel     |
+|   603 | Julia    | Palca     |
++-------+----------+-----------+
+12 rows in set (0.001 sec)

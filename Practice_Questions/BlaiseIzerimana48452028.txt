@@ -657,7 +657,7 @@ MariaDB [fact_library]> SELECT AU_ID, AU_FNAME, AU_LNAME, AU_BIRTHYEAR FROM AUTH
 15 rows in set (0.002 sec)
 
 (23)
-MariaDB [fact_library]> SELECT COUNT(*) AS `Number of Books` FROM BOOK;
+MariaDB [fact_library]> SELECT COUNT(*) AS 'Number of Books' FROM BOOK;
 +-----------------+
 | Number of Books |
 +-----------------+
@@ -666,7 +666,7 @@ MariaDB [fact_library]> SELECT COUNT(*) AS `Number of Books` FROM BOOK;
 1 row in set (0.027 sec)
 
 (24)
-MariaDB [fact_library]> SELECT COUNT(DISTINCT Book_Subject) AS `Number of Subjects` FROM BOOK;
+MariaDB [fact_library]> SELECT COUNT(DISTINCT Book_Subject) AS 'Number of Subjects' FROM BOOK;
 +--------------------+
 | Number of Subjects |
 +--------------------+
@@ -675,10 +675,81 @@ MariaDB [fact_library]> SELECT COUNT(DISTINCT Book_Subject) AS `Number of Subjec
 1 row in set (0.027 sec)
 
 (25)
-MariaDB [fact_library]> SELECT COUNT(*) AS `Available Books` FROM BOOK WHERE Book_Num NOT IN ( SELECT Book_Num  FROM CHECKOUT  WHERE Check_In_Date IS NULL );
+MariaDB [fact_library]> SELECT COUNT(*) AS 'Available Books' FROM BOOK WHERE Book_Num NOT IN ( SELECT Book_Num  FROM CHECKOUT  WHERE Check_In_Date IS NULL );
 +-----------------+
 | Available Books |
 +-----------------+
 |              14 |
 +-----------------+
 1 row in set (0.034 sec)
+
+(26)
+MariaDB [fact_library]> SELECT MAX(Book_Cost) AS 'Most Expensive' FROM BOOK;
++----------------+
+| Most Expensive |
++----------------+
+|         129.95 |
++----------------+
+1 row in set (0.010 sec)
+
+(27)
+MariaDB [fact_library]> SELECT MIN(Book_Cost) AS 'Least Expensive' FROM BOOK;
++-----------------+
+| Least Expensive |
++-----------------+
+|           49.95 |
++-----------------+
+1 row in set (0.001 sec)
+
+(28)
+MariaDB [fact_library]> SELECT COUNT(DISTINCT Pat_ID) AS 'DIFFERENT PATRONS' FROM CHECKOUT;
++-------------------+
+| DIFFERENT PATRONS |
++-------------------+
+|                33 |
++-------------------+
+1 row in set (0.027 sec)
+
+(29)
+MariaDB [fact_library]> SELECT BOOK_SUBJECT, COUNT(*) AS 'Books In Subject' FROM BOOK GROUP BY Book_Subject ORDER BY 'Books In Subject' DESC, Book_Subject ASC;
++--------------+------------------+
+| BOOK_SUBJECT | Books In Subject |
++--------------+------------------+
+| Programming  |                9 |
+| Cloud        |                4 |
+| Database     |                4 |
+| Middleware   |                3 |
++--------------+------------------+
+4 rows in set (0.003 sec)
+
+(30)
+MariaDB [fact_library]> SELECT Au_ID, COUNT(Book_Num) AS 'Books Written' FROM WRITES GROUP BY Au_ID ORDER BY 'Books Written' DESC, Au_ID ASC;
++-------+---------------+
+| AU_ID | Books Written |
++-------+---------------+
+|   262 |             3 |
+|   460 |             3 |
+|   185 |             2 |
+|   229 |             2 |
+|   251 |             2 |
+|   383 |             2 |
+|   394 |             2 |
+|   559 |             2 |
+|   218 |             1 |
+|   273 |             1 |
+|   284 |             1 |
+|   438 |             1 |
+|   581 |             1 |
+|   592 |             1 |
+|   603 |             1 |
++-------+---------------+
+15 rows in set (0.003 sec)
+
+(31)
+MariaDB [fact_library]> SELECT SUM(Book_Cost) AS 'Library Value' FROM BOOK;
++---------------+
+| Library Value |
++---------------+
+|       1499.00 |
++---------------+
+1 row in set (0.002 sec)
